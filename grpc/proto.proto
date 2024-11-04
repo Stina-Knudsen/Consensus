@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+// https://www.geeksforgeeks.org/lamports-algorithm-for-mutual-exclusion-in-distributed-system/
+service CriticalSection {
+    rpc RequestAccess(RequestMessage) returns (ReplyMessage);
+    rpc ReleaseAccess(ReleaseMessage) returns (ReplyMessage);
+}
+
+message RequestMessage {
+    int64 timestamp = 1;
+    string nodeId = 2;
+}
+
+message ReleaseMessage {
+    string nodeId = 1;
+}
+
+message ReplyMessage {
+    bool granted = 1;
+    string nodeId = 2;
+}
