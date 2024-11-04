@@ -1,5 +1,8 @@
 syntax = "proto3";
 
+option go_package = "../grpc";
+
+package proto;
 
 // https://www.geeksforgeeks.org/ricart-agrawala-algorithm-in-mutual-exclusion-in-distributed-system/
 
