@@ -4,6 +4,18 @@ syntax = "proto3";
 // https://www.geeksforgeeks.org/ricart-agrawala-algorithm-in-mutual-exclusion-in-distributed-system/
 
 service MutexService {
-    
+    rpc RequestMessage(Request) returns (Reply);
+}
+
+message Request {
+    int32 nodeId = 1;
+    int32 lamport = 2;
+    string port = 3;
+}
+
+
+message Reply {
+    string message = 1;
+    int32 lamport = 2;
 }
 
