@@ -1,5 +1,9 @@
 syntax = "proto3";
 
+option go_package = "../grpc";
+
+package Consensus;
+
 // https://www.geeksforgeeks.org/lamports-algorithm-for-mutual-exclusion-in-distributed-system/
 service CriticalSection {
     rpc RequestAccess(RequestMessage) returns (ReplyMessage);
