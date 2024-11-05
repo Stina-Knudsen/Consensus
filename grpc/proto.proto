@@ -8,6 +8,7 @@ package proto;
 
 service MutexService {
     rpc RequestMessage(Request) returns (Reply);
+    rpc ReplyMessage(Reply) return (Empty);
 }
 
 message Request {
@@ -16,9 +17,9 @@ message Request {
     string port = 3;
 }
 
-
 message Reply {
     string message = 1;
     int32 lamport = 2;
 }
 
+message Empty {}
