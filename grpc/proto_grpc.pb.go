@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	MutexService_RequestMessage_FullMethodName = "/proto.MutexService/RequestMessage"
+	MutexService_ReplyMessage_FullMethodName   = "/proto.MutexService/ReplyMessage"
 )
 
 // MutexServiceClient is the client API for MutexService service.
@@ -27,6 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MutexServiceClient interface {
 	RequestMessage(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Reply, error)
+	ReplyMessage(ctx context.Context, in *Reply, opts ...grpc.CallOption) (*Empty, error)
 }
 
 type mutexServiceClient struct {
@@ -47,11 +49,22 @@ func (c *mutexServiceClient) RequestMessage(ctx context.Context, in *Request, op
 	return out, nil
 }
 
+func (c *mutexServiceClient) ReplyMessage(ctx context.Context, in *Reply, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, MutexService_ReplyMessage_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MutexServiceServer is the server API for MutexService service.
 // All implementations must embed UnimplementedMutexServiceServer
 // for forward compatibility.
 type MutexServiceServer interface {
 	RequestMessage(context.Context, *Request) (*Reply, error)
+	ReplyMessage(context.Context, *Reply) (*Empty, error)
 	mustEmbedUnimplementedMutexServiceServer()
 }
 
@@ -64,6 +77,9 @@ type UnimplementedMutexServiceServer struct{}
 
 func (UnimplementedMutexServiceServer) RequestMessage(context.Context, *Request) (*Reply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RequestMessage not implemented")
+}
+func (UnimplementedMutexServiceServer) ReplyMessage(context.Context, *Reply) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ReplyMessage not implemented")
 }
 func (UnimplementedMutexServiceServer) mustEmbedUnimplementedMutexServiceServer() {}
 func (UnimplementedMutexServiceServer) testEmbeddedByValue()                      {}
@@ -104,6 +120,24 @@ func _MutexService_RequestMessage_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MutexService_ReplyMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Reply)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MutexServiceServer).ReplyMessage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MutexService_ReplyMessage_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MutexServiceServer).ReplyMessage(ctx, req.(*Reply))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MutexService_ServiceDesc is the grpc.ServiceDesc for MutexService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -114,6 +148,10 @@ var MutexService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RequestMessage",
 			Handler:    _MutexService_RequestMessage_Handler,
+		},
+		{
+			MethodName: "ReplyMessage",
+			Handler:    _MutexService_ReplyMessage_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

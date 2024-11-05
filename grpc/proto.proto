@@ -8,7 +8,7 @@ package proto;
 
 service MutexService {
     rpc RequestMessage(Request) returns (Reply);
-    rpc ReplyMessage(Reply) return (Empty);
+    rpc ReplyMessage(Reply) returns (Empty);
 }
 
 message Request {
