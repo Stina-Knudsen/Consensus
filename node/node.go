@@ -52,8 +52,6 @@ func main() {
 	// parsing the CLI input
 	flag.Parse()
 
-	log.Println("---------- Starting Node ----------")
-
 	// writing to the log
 	file, err := os.OpenFile("../nodeLog.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0600)
 	if err != nil {
@@ -63,6 +61,8 @@ func main() {
 
 	// Writing das file, jaaa
 	log.SetOutput(file)
+
+	log.Println("---------- Starting Node ----------")
 
 	node := Node{
 		state:          released,
@@ -123,7 +123,7 @@ func (node *Node) connectNodes() {
 		log.Printf("------- nodeID: %s\n", nodeIDStr)
 		log.Printf("------- port: %s\n", port)
 
-		// nodeID from string to integer
+		// nodeID from string to integer, does not need
 		nodeID, err := strconv.Atoi(nodeIDStr)
 		if err != nil {
 			log.Printf("Invalid node ID for peer %s: %v", peerAddr, err)
@@ -164,15 +164,16 @@ func (node *Node) handleInput() {
 		if strings.Contains(input, "request") {
 			go node.requestAccess()
 		} else {
-			fmt.Print("Not a known command, please try again :))")
+			fmt.Print("Not a known command, please try again :))\n")
 		}
 	}
 }
 
 func (node *Node) requestAccess() {
 	node.incrementLamport()
-	node.state = requested
 	node.pendingReplies = int32(len(node.connections))
+
+	node.state = requested
 
 	for id, conn := range node.connections {
 		_, err := conn.node.RequestMessage(context.Background(), &proto.Request{
@@ -201,14 +202,18 @@ func (node *Node) RequestMessage(ctx context.Context, req *proto.Request) (*prot
 
 	if node.state == held || (node.state == requested && (node.lamport < req.Lamport || (node.lamport == req.Lamport && node.nodeID < req.NodeId))) {
 		node.queue = append(node.queue, req.NodeId)
+		log.Printf("Request from node %d deferred at lamport: %d", node.nodeID, node.lamport)
 		return &proto.Reply{Message: "Request deferred", Lamport: node.lamport}, nil
 	}
 
+	log.Printf("Request from node %d granted at lamport: %d", node.nodeID, node.lamport)
 	return &proto.Reply{Message: "Request granted", Lamport: node.lamport}, nil
 }
 
 func (node *Node) enterCriticalSection() {
 	node.mutex.Lock()
+	defer node.mutex.Unlock()
+
 	node.state = held
 	log.Printf("Node %d is entering the critical section\n", node.nodeID)
 
@@ -216,7 +221,6 @@ func (node *Node) enterCriticalSection() {
 
 	log.Printf("Node %d is leaving the critical section\n", node.nodeID)
 	node.state = released
-	node.mutex.Unlock()
 
 	node.sendDeferredReplies()
 }
