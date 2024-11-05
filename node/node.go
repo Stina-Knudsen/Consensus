@@ -2,10 +2,13 @@ package main
 
 import (
 	proto "Consensus/grpc"
+	"bufio"
+	"context"
 	"flag"
 	"fmt"
 	"log"
 	"net"
+	"os"
 	"strings"
 	"sync"
 	"time"
@@ -58,8 +61,12 @@ func main() {
 	}
 
 	go node.instansiateNode()
-
 	node.connectNodes()
+
+	go node.handleInput()
+	for {
+		time.Sleep(5 * time.Second)
+	}
 
 }
 
@@ -78,10 +85,6 @@ func (node *Node) instansiateNode() {
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("failed to serve %v", err)
 	}
-}
-
-func updateState() {
-
 }
 
 func (node *Node) connectNodes() {
@@ -107,19 +110,44 @@ func (node *Node) connectNodes() {
 	}
 }
 
+func (node *Node) handleInput() {
+	reader := bufio.NewReader(os.Stdin)
+
+	// To infinity, AND BEYOND
+	for {
+		fmt.Print("**** type 'request' to enter the critical section ****")
+
+		input, _ := reader.ReadString('\n')
+		input = strings.TrimSpace(input)
+
+		if strings.Contains(input, "request") {
+			go node.requestAccess()
+		} else {
+			fmt.Print("Not a known command, please try again :))")
+		}
+	}
+}
+
 func (node *Node) requestAccess() {
 	node.incrementLamport()
 	node.state = requested
 
-	// Request access
+	for id, conn := range node.connections {
+		_, err := conn.node.RequestMessage(context.Background(), &proto.Request{
+			NodeId:  node.nodeID,
+			Lamport: node.lamport,
+			Port:    *port,
+		})
+		if err != nil {
+			log.Printf("Error requesting access from node %d: %v", id, err)
+		}
+	}
 
-	// Vent på svar
+	for i := 0; i < len(node.connections); i++ {
+		<-node.replies
+	}
 
-	// Hop ind
-}
-
-func (node *Node) receiveReply() {
-
+	node.enterCriticalSection()
 }
 
 func (node *Node) enterCriticalSection() {
@@ -132,16 +160,31 @@ func (node *Node) enterCriticalSection() {
 	node.mutex.Unlock()
 }
 
-func (node *Node) sendReply() {
+func (node *Node) RequestMessage(ctx context.Context, req *proto.Request) (*proto.Reply, error) {
+	node.incrementLamport()
+	node.lamport = max(node.lamport, req.Lamport) + 1
 
+	if node.state == held || (node.state == requested && node.lamport < req.Lamport) {
+		node.queue = append(node.queue, req.NodeId)
+		return &proto.Reply{Message: "Request deferred", Lamport: node.lamport}, nil
+	}
+
+	return &proto.Reply{Message: "Request granted", Lamport: node.lamport}, nil
+}
+
+func (node *Node) sendReply() {
+	// Hvordan sende de replies???
+}
+
+func max(a, b int32) int32 {
+	if a > b {
+		return a
+	}
+	return b
 }
 
 func (node *Node) incrementLamport() {
 	node.mutex.Lock()
 	node.lamport++
 	node.mutex.Unlock()
-}
-
-func checkLamport() {
-	//if(node.lamport < )
 }
