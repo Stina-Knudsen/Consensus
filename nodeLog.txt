@@ -1,0 +1,52 @@
+2024/11/05 22:34:53 ------- nodeID: 2
+2024/11/05 22:34:53 ------- port: 5002
+2024/11/05 22:34:53 Node 1 listening on port 5001
+2024/11/05 22:34:53 Connected node 2 to peer 2:5002
+2024/11/05 22:34:53 ------- nodeID: 3
+2024/11/05 22:34:53 ------- port: 5003
+2024/11/05 22:34:53 Connected node 3 to peer 3:5003
+2024/11/05 22:35:09 ------- nodeID: 1
+2024/11/05 22:35:09 ------- port: 5001
+2024/11/05 22:35:09 Node 2 listening on port 5002
+2024/11/05 22:35:09 Connected node 1 to peer 1:5001
+2024/11/05 22:35:09 ------- nodeID: 3
+2024/11/05 22:35:09 ------- port: 5003
+2024/11/05 22:35:09 Connected node 3 to peer 3:5003
+2024/11/05 22:35:21 ------- nodeID: 1
+2024/11/05 22:35:21 ------- port: 5001
+2024/11/05 22:35:21 Node 3 listening on port 5003
+2024/11/05 22:35:21 Connected node 1 to peer 1:5001
+2024/11/05 22:35:21 ------- nodeID: 2
+2024/11/05 22:35:21 ------- port: 5002
+2024/11/05 22:35:21 Connected node 2 to peer 2:5002
+2024/11/05 22:35:26 Error requesting access from node 1: rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing: dial tcp: lookup port: no such host"
+2024/11/05 22:35:26 Error requesting access from node 3: rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing: dial tcp: lookup port: no such host"
+2024/11/05 22:41:21 ------- nodeID: 127.0.0.1
+2024/11/05 22:41:21 ------- port: 5002
+2024/11/05 22:41:21 Invalid node ID for peer 127.0.0.1:5002: strconv.Atoi: parsing "127.0.0.1": invalid syntax
+2024/11/05 22:41:21 ------- nodeID: 127.0.0.1
+2024/11/05 22:41:21 ------- port: 5003
+2024/11/05 22:41:21 Invalid node ID for peer 127.0.0.1:5003: strconv.Atoi: parsing "127.0.0.1": invalid syntax
+2024/11/05 22:41:21 Node 1 listening on port 5001
+2024/11/05 22:41:35 ------- nodeID: 127.0.0.1
+2024/11/05 22:41:35 ------- port: 5001
+2024/11/05 22:41:35 Invalid node ID for peer 127.0.0.1:5001: strconv.Atoi: parsing "127.0.0.1": invalid syntax
+2024/11/05 22:41:35 ------- nodeID: 127.0.0.1
+2024/11/05 22:41:35 ------- port: 5003
+2024/11/05 22:41:35 Invalid node ID for peer 127.0.0.1:5003: strconv.Atoi: parsing "127.0.0.1": invalid syntax
+2024/11/05 22:41:35 Node 2 listening on port 5002
+2024/11/05 22:41:48 ------- nodeID: 127.0.0.1
+2024/11/05 22:41:48 ------- port: 5001
+2024/11/05 22:41:48 Invalid node ID for peer 127.0.0.1:5001: strconv.Atoi: parsing "127.0.0.1": invalid syntax
+2024/11/05 22:41:48 ------- nodeID: 127.0.0.1
+2024/11/05 22:41:48 ------- port: 5002
+2024/11/05 22:41:48 Invalid node ID for peer 127.0.0.1:5002: strconv.Atoi: parsing "127.0.0.1": invalid syntax
+2024/11/05 22:41:48 Node 3 listening on port 5003
+2024/11/05 22:43:05 Node 2 is entering the critical section
+2024/11/05 22:43:10 Node 2 is leaving the critical section
+2024/11/05 22:43:21 Node 1 is entering the critical section
+2024/11/05 22:43:26 Node 1 is leaving the critical section
+2024/11/05 22:43:33 Node 2 is entering the critical section
+2024/11/05 22:43:38 Node 3 is entering the critical section
+2024/11/05 22:43:38 Node 2 is leaving the critical section
+2024/11/05 22:43:43 Node 3 is leaving the critical section

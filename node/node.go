@@ -15,7 +15,7 @@ import (
 	"time"
 
 	"google.golang.org/grpc"
-	//"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 // Make nodes work as both client AND server #lifehack
@@ -49,10 +49,20 @@ var peerAddresses = flag.String("peers", "", "Comma-separated list of other node
 
 func main() {
 
+	// parsing the CLI input
 	flag.Parse()
-	// Now the real fun begins
 
-	// Start the server/conection and such
+	log.Println("---------- Starting Node ----------")
+
+	// writing to the log
+	file, err := os.OpenFile("../nodeLog.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0600)
+	if err != nil {
+		log.Fatalf("failed to open log file: %v", err)
+	}
+	defer file.Close()
+
+	// Writing das file, jaaa
+	log.SetOutput(file)
 
 	node := Node{
 		state:          released,
@@ -70,7 +80,6 @@ func main() {
 	for {
 		time.Sleep(5 * time.Second)
 	}
-
 }
 
 func (node *Node) instansiateNode() {
@@ -83,6 +92,7 @@ func (node *Node) instansiateNode() {
 	grpcServer := grpc.NewServer()
 	proto.RegisterMutexServiceServer(grpcServer, node)
 
+	log.Printf("Node %d listening on port %s\n", *name, *port)
 	fmt.Printf("Node %d listening on port %s\n", *name, *port)
 
 	if err := grpcServer.Serve(lis); err != nil {
@@ -106,18 +116,23 @@ func (node *Node) connectNodes() {
 			continue
 		}
 
-		// Extract nodeID and port
+		// extract nodeID and port
 		nodeIDStr := parts[0]
 		port := parts[1]
 
-		// Convert nodeID to an integer
+		log.Printf("------- nodeID: %s\n", nodeIDStr)
+		log.Printf("------- port: %s\n", port)
+
+		// nodeID from string to integer
 		nodeID, err := strconv.Atoi(nodeIDStr)
 		if err != nil {
 			log.Printf("Invalid node ID for peer %s: %v", peerAddr, err)
 			continue
 		}
 
-		conn, err := grpc.Dial("port:"+port, grpc.WithInsecure())
+		address := fmt.Sprintf("%s:%s", parts[0], port)
+
+		conn, err := grpc.Dial(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
 		if err != nil {
 			log.Printf("Failed to connect to peer node %s on port %s: %v", nodeIDStr, port, err)
 			continue
@@ -126,21 +141,23 @@ func (node *Node) connectNodes() {
 		client := proto.NewMutexServiceClient(conn)
 
 		//nodeID := int32(strings.Split(peerAddr, ":")[1][len(peerAddr)-1])
-		node.connections[int32(nodeID)] = &Connection{node: client, nodeConnection: conn}
+		node.connections[int32(nodeID)] = &Connection{
+			node:           client,
+			nodeConnection: conn,
+		}
 
 		//node.connections[nodeID] = &Connection{node: client, nodeConnection: conn}
 
-		log.Printf("Connected to peer %s", peerAddr)
+		log.Printf("Connected node %d to peer %s", nodeID, peerAddr)
 	}
 }
 
 func (node *Node) handleInput() {
 	reader := bufio.NewReader(os.Stdin)
+	fmt.Print("**** type 'request' to enter the critical section ****\n")
 
 	// To infinity, AND BEYOND
 	for {
-		fmt.Print("**** type 'request' to enter the critical section ****")
-
 		input, _ := reader.ReadString('\n')
 		input = strings.TrimSpace(input)
 
@@ -176,6 +193,9 @@ func (node *Node) requestAccess() {
 }
 
 func (node *Node) RequestMessage(ctx context.Context, req *proto.Request) (*proto.Reply, error) {
+
+	log.Printf("Node %d is requesting access at lamport time %d", node.nodeID, node.lamport)
+
 	node.incrementLamport()
 	node.lamport = max(node.lamport, req.Lamport) + 1
 
@@ -190,10 +210,11 @@ func (node *Node) RequestMessage(ctx context.Context, req *proto.Request) (*prot
 func (node *Node) enterCriticalSection() {
 	node.mutex.Lock()
 	node.state = held
-	fmt.Printf("Node %d is entering the critical section\n", node.nodeID) //til loggen
-	time.Sleep(2 * time.Second)
+	log.Printf("Node %d is entering the critical section\n", node.nodeID)
 
-	fmt.Printf("Node %d is leaving the critical section\n", node.nodeID) //til loggen
+	time.Sleep(5 * time.Second)
+
+	log.Printf("Node %d is leaving the critical section\n", node.nodeID)
 	node.state = released
 	node.mutex.Unlock()
 
@@ -206,6 +227,7 @@ func (node *Node) sendDeferredReplies() {
 
 	for _, id := range node.queue {
 		if conn, exists := node.connections[id]; exists {
+			node.incrementLamport()
 			_, err := conn.node.ReplyMessage(context.Background(), &proto.Reply{
 				Message: "Request granted",
 				Lamport: node.lamport,
