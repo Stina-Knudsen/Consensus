@@ -9,6 +9,7 @@ import (
 	"log"
 	"net"
 	"os"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -98,15 +99,36 @@ func (node *Node) connectNodes() {
 
 	peerList := strings.Split(peers, ",")
 	for _, peerAddr := range peerList {
-		conn, err := grpc.Dial(peerAddr, grpc.WithInsecure())
+
+		parts := strings.Split(peerAddr, ":")
+		if len(parts) != 2 {
+			log.Printf("Invalid peer format for %s, skipping", peerAddr)
+			continue
+		}
+
+		// Extract nodeID and port
+		nodeIDStr := parts[0]
+		port := parts[1]
+
+		// Convert nodeID to an integer
+		nodeID, err := strconv.Atoi(nodeIDStr)
 		if err != nil {
-			log.Printf("Failed to connect to peer %s: %v", peerAddr, err)
+			log.Printf("Invalid node ID for peer %s: %v", peerAddr, err)
+			continue
+		}
+
+		conn, err := grpc.Dial("port:"+port, grpc.WithInsecure())
+		if err != nil {
+			log.Printf("Failed to connect to peer node %s on port %s: %v", nodeIDStr, port, err)
 			continue
 		}
 
 		client := proto.NewMutexServiceClient(conn)
-		nodeID := int32(strings.Split(peerAddr, ":")[1][len(peerAddr)-1]) // This is a placeholder; adjust based on node ID scheme
-		node.connections[nodeID] = &Connection{node: client, nodeConnection: conn}
+
+		//nodeID := int32(strings.Split(peerAddr, ":")[1][len(peerAddr)-1])
+		node.connections[int32(nodeID)] = &Connection{node: client, nodeConnection: conn}
+
+		//node.connections[nodeID] = &Connection{node: client, nodeConnection: conn}
 
 		log.Printf("Connected to peer %s", peerAddr)
 	}
