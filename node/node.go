@@ -17,7 +17,12 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
+// Måske først start alle noder og SÅ forbind dem #genius
+
 // Make nodes work as both client AND server #lifehack
+// go run node.go -port=5001 -name=1 -peers="127.0.0.1:5002,127.0.0.1:5003"
+// go run node.go -port=5002 -name=2 -peers="127.0.0.1:5001,127.0.0.1:5003"
+// go run node.go -port=5003 -name=3 -peers="127.0.0.1:5001,127.0.0.1:5002"
 
 const (
 	held      string = "held"
@@ -76,9 +81,11 @@ func main() {
 	node.connectNodes()
 
 	go node.handleInput()
+
 	for {
 		time.Sleep(5 * time.Second)
 	}
+	log.Printf("Node %d finished running main", node.nodeID)
 }
 
 func (node *Node) instansiateNode() {
@@ -97,6 +104,8 @@ func (node *Node) instansiateNode() {
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("failed to serve %v", err)
 	}
+
+	log.Printf("Node %d finished running instansiateNode", node.nodeID)
 }
 
 func (node *Node) connectNodes() {
@@ -113,9 +122,20 @@ func (node *Node) connectNodes() {
 
 		log.Printf("Connecting to peer with nodeID: %d, address: %s\n", nodeID, peerAddr)
 
-		conn, err := grpc.Dial(peerAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+		var conn *grpc.ClientConn
+		var err error
+		for retries := 0; retries < 5; retries++ {
+			conn, err = grpc.Dial(peerAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+			if err == nil {
+				break
+			}
+
+			log.Printf("Attempt %d to connect to peer %s failed: %v", retries+1, peerAddr, err)
+			time.Sleep(time.Second)
+		}
+
 		if err != nil {
-			log.Printf("Failed to connect to peer node %s on port %s: %v", peerAddr, *port, err)
+			log.Printf("Failed to connect to peer %s after 5 attempts: %v", peerAddr, err)
 			continue
 		}
 
@@ -143,6 +163,7 @@ func (node *Node) handleInput() {
 
 		if strings.Contains(input, "request") {
 			go node.requestAccess()
+			log.Printf("Node %d finished running requestAccess", node.nodeID)
 		} else {
 			fmt.Print("Not a known command, please try again :))\n")
 		}
@@ -151,6 +172,7 @@ func (node *Node) handleInput() {
 
 func (node *Node) requestAccess() {
 	node.incrementLamport()
+	log.Printf("Node %d state change from %s to %s", node.nodeID, node.state, requested)
 	node.state = requested
 	node.pendingReplies = int(len(node.connections))
 
@@ -167,11 +189,14 @@ func (node *Node) requestAccess() {
 		}
 	}
 
-	for i := 0; i < len(node.connections); i++ {
-		<-node.replies
+	for node.pendingReplies > 0 {
+		reply := <-node.replies
+		node.pendingReplies--
+		log.Printf("Node %d received reply (%v), pendingReplies: %d", node.nodeID, reply, node.pendingReplies)
 	}
 
 	node.enterCriticalSection()
+	log.Printf("Node %d finished running requestAccess", node.nodeID)
 }
 
 func (node *Node) RequestMessage(ctx context.Context, req *proto.Request) (*proto.Reply, error) {
@@ -192,7 +217,9 @@ func (node *Node) RequestMessage(ctx context.Context, req *proto.Request) (*prot
 }
 
 func (node *Node) enterCriticalSection() {
+	log.Printf("Node %d is running enterCriticalSection\n", node.nodeID)
 	node.mutex.Lock()
+	log.Printf("Node %d state change from %s to %s", node.nodeID, node.state, held)
 	node.state = held
 	node.mutex.Unlock()
 
@@ -201,9 +228,12 @@ func (node *Node) enterCriticalSection() {
 	time.Sleep(5 * time.Second)
 
 	log.Printf("Node %d is leaving the critical section\n", node.nodeID)
+	log.Printf("Node %d state change from %s to %s", node.nodeID, node.state, released)
 	node.state = released
 
 	node.sendDeferredReplies()
+
+	log.Printf("Node %d finished running enterCriticalSection", node.nodeID)
 }
 
 func (node *Node) sendDeferredReplies() {
@@ -213,6 +243,7 @@ func (node *Node) sendDeferredReplies() {
 	for _, id := range node.queue {
 		if conn, exists := node.connections[id]; exists {
 			node.incrementLamport()
+			log.Printf("Node %d sending deferred reply to Node %d at Lamport time %d", node.nodeID, id, node.lamport)
 			_, err := conn.node.ReplyMessage(context.Background(), &proto.Reply{
 				Message: "Request granted",
 				Lamport: node.lamport,
@@ -220,11 +251,13 @@ func (node *Node) sendDeferredReplies() {
 			if err != nil {
 				log.Printf("Error sending deferred reply to node %d: %v", id, err)
 			}
+			log.Printf("Node %d finished running sendDeferredReplies", node.nodeID)
 		}
 	}
 
 	// Clearing the queue folks
 	node.queue = []int32{}
+	log.Printf("Node %d finished running sendDeferredReplies (cleared the queue)", node.nodeID)
 }
 
 func (node *Node) ReplyMessage(ctx context.Context, req *proto.Reply) (*proto.Empty, error) {
@@ -245,6 +278,6 @@ func max(a, b int32) int32 {
 
 func (node *Node) incrementLamport() {
 	node.mutex.Lock()
+	defer node.mutex.Unlock()
 	node.lamport++
-	node.mutex.Unlock()
 }

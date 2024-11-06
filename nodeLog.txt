@@ -1,129 +1,56 @@
-2024/11/05 23:11:52 ---------- Starting Node ----------
-2024/11/05 23:11:52 ------- nodeID: 127.0.0.1
-2024/11/05 23:11:52 ------- port: 5002
-2024/11/05 23:11:52 Invalid node ID for peer 127.0.0.1:5002: strconv.Atoi: parsing "127.0.0.1": invalid syntax
-2024/11/05 23:11:52 ------- nodeID: 127.0.0.1
-2024/11/05 23:11:52 ------- port: 5003
-2024/11/05 23:11:52 Invalid node ID for peer 127.0.0.1:5003: strconv.Atoi: parsing "127.0.0.1": invalid syntax
-2024/11/05 23:11:52 Node 1 listening on port 5001
-2024/11/05 23:12:03 ---------- Starting Node ----------
-2024/11/05 23:12:03 ------- nodeID: 127.0.0.1
-2024/11/05 23:12:03 ------- port: 5001
-2024/11/05 23:12:03 Invalid node ID for peer 127.0.0.1:5001: strconv.Atoi: parsing "127.0.0.1": invalid syntax
-2024/11/05 23:12:03 ------- nodeID: 127.0.0.1
-2024/11/05 23:12:03 ------- port: 5003
-2024/11/05 23:12:03 Invalid node ID for peer 127.0.0.1:5003: strconv.Atoi: parsing "127.0.0.1": invalid syntax
-2024/11/05 23:12:03 Node 2 listening on port 5002
-2024/11/05 23:12:14 ---------- Starting Node ----------
-2024/11/05 23:12:14 ------- nodeID: 127.0.0.1
-2024/11/05 23:12:14 ------- port: 5001
-2024/11/05 23:12:14 Invalid node ID for peer 127.0.0.1:5001: strconv.Atoi: parsing "127.0.0.1": invalid syntax
-2024/11/05 23:12:14 ------- nodeID: 127.0.0.1
-2024/11/05 23:12:14 ------- port: 5002
-2024/11/05 23:12:14 Invalid node ID for peer 127.0.0.1:5002: strconv.Atoi: parsing "127.0.0.1": invalid syntax
-2024/11/05 23:12:14 Node 3 listening on port 5003
-2024/11/05 23:13:46 ---------- Starting Node ----------
-2024/11/05 23:13:46 ------- nodeID: 127.0.0.1
-2024/11/05 23:13:46 ------- port: 5002
-2024/11/05 23:13:46 Invalid node ID for peer 127.0.0.1:5002: strconv.Atoi: parsing "127.0.0.1": invalid syntax
-2024/11/05 23:13:46 ------- nodeID: 127.0.0.1
-2024/11/05 23:13:46 ------- port: 5003
-2024/11/05 23:13:46 Invalid node ID for peer 127.0.0.1:5003: strconv.Atoi: parsing "127.0.0.1": invalid syntax
-2024/11/05 23:13:46 Node 1 listening on port 5001
-2024/11/05 23:14:32 ---------- Starting Node ----------
-2024/11/05 23:14:32 ------- nodeID: 127.0.0.1
-2024/11/05 23:14:32 ------- port: 5001
-2024/11/05 23:14:32 Invalid node ID for peer 127.0.0.1:5001: strconv.Atoi: parsing "127.0.0.1": invalid syntax
-2024/11/05 23:14:32 ------- nodeID: 127.0.0.1
-2024/11/05 23:14:32 ------- port: 5003
-2024/11/05 23:14:32 Invalid node ID for peer 127.0.0.1:5003: strconv.Atoi: parsing "127.0.0.1": invalid syntax
-2024/11/05 23:14:32 Node 2 listening on port 5002
-2024/11/05 23:14:42 ---------- Starting Node ----------
-2024/11/05 23:14:42 ------- nodeID: 127.0.0.1
-2024/11/05 23:14:42 ------- port: 5001
-2024/11/05 23:14:42 Invalid node ID for peer 127.0.0.1:5001: strconv.Atoi: parsing "127.0.0.1": invalid syntax
-2024/11/05 23:14:42 ------- nodeID: 127.0.0.1
-2024/11/05 23:14:42 ------- port: 5002
-2024/11/05 23:14:42 Invalid node ID for peer 127.0.0.1:5002: strconv.Atoi: parsing "127.0.0.1": invalid syntax
-2024/11/05 23:14:42 Node 3 listening on port 5003
-2024/11/05 23:14:46 Node 3 is entering the critical section
-2024/11/05 23:14:51 Node 3 is leaving the critical section
-2024/11/05 23:14:53 Node 2 is entering the critical section
-2024/11/05 23:14:58 Node 2 is leaving the critical section
-2024/11/05 23:14:58 Node 1 is entering the critical section
-2024/11/05 23:15:03 Node 1 is leaving the critical section
-2024/11/06 10:05:09 ---------- Starting Node ----------
-2024/11/06 10:05:09 ------- nodeID: 1
-2024/11/06 10:05:09 ------- port: 127.0.0.1:5002
-2024/11/06 10:05:09 Node 1 listening on port 5001
-2024/11/06 10:05:09 Connected node 1 to peer 127.0.0.1:5002
-2024/11/06 10:05:09 ------- nodeID: 2
-2024/11/06 10:05:09 ------- port: 127.0.0.1:5003
-2024/11/06 10:05:09 Connected node 2 to peer 127.0.0.1:5003
-2024/11/06 10:05:20 ---------- Starting Node ----------
-2024/11/06 10:05:20 ------- nodeID: 1
-2024/11/06 10:05:20 ------- port: 127.0.0.1:5001
-2024/11/06 10:05:20 Node 2 listening on port 5002
-2024/11/06 10:05:20 Connected node 1 to peer 127.0.0.1:5001
-2024/11/06 10:05:20 ------- nodeID: 2
-2024/11/06 10:05:20 ------- port: 127.0.0.1:5003
-2024/11/06 10:05:20 Connected node 2 to peer 127.0.0.1:5003
-2024/11/06 10:05:33 ---------- Starting Node ----------
-2024/11/06 10:05:33 ------- nodeID: 1
-2024/11/06 10:05:33 ------- port: 127.0.0.1:5001
-2024/11/06 10:05:33 Node 3 listening on port 5003
-2024/11/06 10:05:33 Connected node 1 to peer 127.0.0.1:5001
-2024/11/06 10:05:33 ------- nodeID: 2
-2024/11/06 10:05:33 ------- port: 127.0.0.1:5002
-2024/11/06 10:05:33 Connected node 2 to peer 127.0.0.1:5002
-2024/11/06 10:05:37 Node 1 is requesting access at lamport time 1
-2024/11/06 10:05:37 Request from node 1 granted at lamport: 3
-2024/11/06 10:05:37 Node 3 is requesting access at lamport time 1
-2024/11/06 10:05:37 Request from node 3 granted at lamport: 3
-2024/11/06 10:05:41 Node 3 is requesting access at lamport time 3
-2024/11/06 10:05:41 Request from node 3 granted at lamport: 5
-2024/11/06 10:05:41 Node 2 is requesting access at lamport time 2
-2024/11/06 10:05:41 Request from node 2 granted at lamport: 5
-2024/11/06 10:10:14 ---------- Starting Node ----------
-2024/11/06 10:10:14 Connecting to peer with nodeID: 1, address: 127.0.0.1:5002
-2024/11/06 10:10:14 Node 1 listening on port 5001
-2024/11/06 10:10:14 Connected node 1 to peer 127.0.0.1:5002
-2024/11/06 10:10:14 Connecting to peer with nodeID: 2, address: 127.0.0.1:5003
-2024/11/06 10:10:14 Connected node 2 to peer 127.0.0.1:5003
-2024/11/06 10:10:25 ---------- Starting Node ----------
-2024/11/06 10:10:25 Connecting to peer with nodeID: 1, address: 127.0.0.1:5001
-2024/11/06 10:10:25 Node 2 listening on port 5002
-2024/11/06 10:10:25 Connected node 1 to peer 127.0.0.1:5001
-2024/11/06 10:10:25 Connecting to peer with nodeID: 2, address: 127.0.0.1:5003
-2024/11/06 10:10:25 Connected node 2 to peer 127.0.0.1:5003
-2024/11/06 10:10:36 ---------- Starting Node ----------
-2024/11/06 10:10:36 Connecting to peer with nodeID: 1, address: 127.0.0.1:5001
-2024/11/06 10:10:36 Node 3 listening on port 5003
-2024/11/06 10:10:36 Connected node 1 to peer 127.0.0.1:5001
-2024/11/06 10:10:36 Connecting to peer with nodeID: 2, address: 127.0.0.1:5002
-2024/11/06 10:10:36 Connected node 2 to peer 127.0.0.1:5002
-2024/11/06 10:10:39 Node 1 is requesting access at lamport time 1
-2024/11/06 10:10:39 Request from node 1 granted at lamport: 3
-2024/11/06 10:10:39 Node 2 is requesting access at lamport time 1
-2024/11/06 10:10:39 Request from node 2 granted at lamport: 3
-2024/11/06 10:46:05 ---------- Starting Node ----------
-2024/11/06 10:46:05 Connecting to peer with nodeID: 1, address: 127.0.0.1:5002
-2024/11/06 10:46:05 Node 1 listening on port 5001
-2024/11/06 10:46:05 Connected node 1 to peer 127.0.0.1:5002
-2024/11/06 10:46:05 Connecting to peer with nodeID: 2, address: 127.0.0.1:5003
-2024/11/06 10:46:05 Connected node 2 to peer 127.0.0.1:5003
-2024/11/06 10:46:17 ---------- Starting Node ----------
-2024/11/06 10:46:17 Connecting to peer with nodeID: 1, address: 127.0.0.1:5001
-2024/11/06 10:46:17 Node 2 listening on port 5002
-2024/11/06 10:46:17 Connected node 1 to peer 127.0.0.1:5001
-2024/11/06 10:46:17 Connecting to peer with nodeID: 2, address: 127.0.0.1:5003
-2024/11/06 10:46:17 Connected node 2 to peer 127.0.0.1:5003
-2024/11/06 10:46:29 ---------- Starting Node ----------
-2024/11/06 10:46:30 Connecting to peer with nodeID: 1, address: 127.0.0.1:5001
-2024/11/06 10:46:30 Node 3 listening on port 5003
-2024/11/06 10:46:30 Connected node 1 to peer 127.0.0.1:5001
-2024/11/06 10:46:30 Connecting to peer with nodeID: 2, address: 127.0.0.1:5002
-2024/11/06 10:46:30 Connected node 2 to peer 127.0.0.1:5002
-2024/11/06 10:46:35 Node 1 is requesting access at lamport time 2
-2024/11/06 10:46:35 Request from node 2 granted at lamport: 3
-2024/11/06 10:46:35 Request from node 3 granted at lamport: 3
+2024/11/06 11:33:23 ---------- Starting Node ----------
+2024/11/06 11:33:23 Connecting to peer with nodeID: 1, address: 127.0.0.1:5002
+2024/11/06 11:33:23 Node 1 listening on port 5001
+2024/11/06 11:33:23 Connected node 1 to peer 127.0.0.1:5002
+2024/11/06 11:33:23 Connecting to peer with nodeID: 2, address: 127.0.0.1:5003
+2024/11/06 11:33:23 Connected node 2 to peer 127.0.0.1:5003
+2024/11/06 11:33:30 ---------- Starting Node ----------
+2024/11/06 11:33:30 Connecting to peer with nodeID: 1, address: 127.0.0.1:5001
+2024/11/06 11:33:30 Node 2 listening on port 5002
+2024/11/06 11:33:30 Connected node 1 to peer 127.0.0.1:5001
+2024/11/06 11:33:30 Connecting to peer with nodeID: 2, address: 127.0.0.1:5003
+2024/11/06 11:33:30 Connected node 2 to peer 127.0.0.1:5003
+2024/11/06 11:33:39 ---------- Starting Node ----------
+2024/11/06 11:33:39 Connecting to peer with nodeID: 1, address: 127.0.0.1:5001
+2024/11/06 11:33:39 Node 3 listening on port 5003
+2024/11/06 11:33:39 Connected node 1 to peer 127.0.0.1:5001
+2024/11/06 11:33:39 Connecting to peer with nodeID: 2, address: 127.0.0.1:5002
+2024/11/06 11:33:39 Connected node 2 to peer 127.0.0.1:5002
+2024/11/06 11:33:45 Node 1 finished running requestAccess
+2024/11/06 11:33:45 Node 1 state change from released to requested
+2024/11/06 11:33:45 Node 1 is requesting access at lamport time 2
+2024/11/06 11:33:45 Request from node 2 granted at lamport: 3
+2024/11/06 11:33:45 Error requesting access from node 2: rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing: dial tcp 127.0.0.1:5003: connect: connection refused"
+2024/11/06 11:34:10 Node 2 finished running requestAccess
+2024/11/06 11:34:10 Node 2 state change from released to requested
+2024/11/06 11:34:10 Node 2 is requesting access at lamport time 4
+2024/11/06 11:34:10 Request from node 1 granted at lamport: 5
+2024/11/06 11:34:10 Request from node 3 granted at lamport: 5
+2024/11/06 11:45:52 ---------- Starting Node ----------
+2024/11/06 11:45:52 Connecting to peer with nodeID: 1, address: 127.0.0.1:5002
+2024/11/06 11:45:52 Node 1 listening on port 5001
+2024/11/06 11:45:52 Connected node 1 to peer 127.0.0.1:5002
+2024/11/06 11:45:52 Connecting to peer with nodeID: 2, address: 127.0.0.1:5003
+2024/11/06 11:45:52 Connected node 2 to peer 127.0.0.1:5003
+2024/11/06 11:46:00 ---------- Starting Node ----------
+2024/11/06 11:46:00 Connecting to peer with nodeID: 1, address: 127.0.0.1:5001
+2024/11/06 11:46:00 Node 2 listening on port 5002
+2024/11/06 11:46:00 Connected node 1 to peer 127.0.0.1:5001
+2024/11/06 11:46:00 Connecting to peer with nodeID: 2, address: 127.0.0.1:5003
+2024/11/06 11:46:00 Connected node 2 to peer 127.0.0.1:5003
+2024/11/06 11:46:09 ---------- Starting Node ----------
+2024/11/06 11:46:09 Connecting to peer with nodeID: 1, address: 127.0.0.1:5001
+2024/11/06 11:46:09 Node 3 listening on port 5003
+2024/11/06 11:46:09 Connected node 1 to peer 127.0.0.1:5001
+2024/11/06 11:46:09 Connecting to peer with nodeID: 2, address: 127.0.0.1:5002
+2024/11/06 11:46:09 Connected node 2 to peer 127.0.0.1:5002
+2024/11/06 11:46:14 Node 1 finished running requestAccess
+2024/11/06 11:46:14 Node 1 state change from released to requested
+2024/11/06 11:46:14 Node 1 is requesting access at lamport time 2
+2024/11/06 11:46:14 Request from node 2 granted at lamport: 3
+2024/11/06 11:46:14 Error requesting access from node 2: rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing: dial tcp 127.0.0.1:5003: connect: connection refused"
+2024/11/06 11:46:28 Node 3 finished running requestAccess
+2024/11/06 11:46:28 Node 3 state change from released to requested
+2024/11/06 11:46:28 Node 3 is requesting access at lamport time 2
+2024/11/06 11:46:28 Request from node 1 granted at lamport: 4
+2024/11/06 11:46:28 Request from node 2 granted at lamport: 5
