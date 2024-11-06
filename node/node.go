@@ -1,147 +1,164 @@
 package main
 
 import (
-	proto "Consensus/grpc"
-	"flag"
+	"context"
 	"fmt"
 	"log"
 	"net"
-	"strings"
-	"sync"
+	"os"
 	"time"
 
+	pb "Consensus/GRPC"
+
 	"google.golang.org/grpc"
-	//"google.golang.org/grpc/credentials/insecure"
 )
 
-// Make nodes work as both client AND server #lifehack
-
-const (
-	held      string = "held"
-	released  string = "released"
-	requested string = "requested"
-)
-
+// Node represents a node in the token ring system
 type Node struct {
-	proto.UnimplementedMutexServiceServer
-	state       string
-	nodeID      int32
-	replies     chan int
-	mutex       sync.Mutex
-	lamport     int32
-	queue       []int32
-	connections map[int32]*Connection
+	pb.UnimplementedTokenRingServiceServer
+	name         string
+	port         string
+	nextNodeIP   string
+	nextNodePort string
+	hasToken     bool
 }
 
-type Connection struct {
-	node           proto.MutexServiceClient
-	nodeConnection *grpc.ClientConn
+var nodeQueue []string
+
+// NewNode creates a new node instance
+func NewNode(name, port, nextNodeIP, nextNodePort string, hasToken bool) *Node {
+	return &Node{
+		name:         name,
+		port:         port,
+		nextNodeIP:   nextNodeIP,
+		nextNodePort: nextNodePort,
+		hasToken:     true,
+	}
 }
 
-var port = flag.String("port", "5400", "listening at port")
-var name = flag.Int("name", 0, "the node's name")
-var peerAddresses = flag.String("peers", "", "Comma-separated list of other node addresses in the format ip:port")
+// RequestToken handles a token request from another node
+func (n *Node) RequestToken(ctx context.Context, req *pb.TokenRequest) (*pb.TokenResponse, error) {
+	if n.hasToken {
+		log.Printf("%s granting token to %s", n.name, req.GetNodeName())
+		n.hasToken = false
+		n.PassTokenToNext(req.GetNodeName())
+		return &pb.TokenResponse{
+			Status:  "granted",
+			Message: fmt.Sprintf("Token passed to %s", req.GetNodeName()),
+		}, nil
+	}
+	log.Printf("%s does not have the token to grant", n.name)
+	return &pb.TokenResponse{
+		Status:  "denied",
+		Message: "Token not available",
+	}, nil
+}
 
-func main() {
+// PassToken handles passing the token to the next node
+func (n *Node) PassToken(ctx context.Context, token *pb.Token) (*pb.TokenResponse, error) {
+	log.Printf("%s received the token from %s", n.name, token.GetHolder())
+	n.hasToken = true
+	return &pb.TokenResponse{
+		Status:  "received",
+		Message: "Token received",
+	}, nil
+}
 
-	flag.Parse()
-	// Now the real fun begins
+// PassTokenToNext passes the token to the next node in the ring
+func (n *Node) PassTokenToNext(holder string) {
+	var conn *grpc.ClientConn
+	var err error
+	for i := 0; i < 5; i++ { // Retry up to 5 times
+		conn, err = grpc.Dial(fmt.Sprintf("%s:%s", n.nextNodeIP, n.nextNodePort), grpc.WithInsecure())
+		if err == nil {
+			break
+		}
+		log.Printf("Failed to connect to next node, retrying... (%d/5)", i+1)
+		time.Sleep(2 * time.Second) // Wait before retrying
+	}
+	if err != nil {
+		log.Fatalf("Failed to connect to next node after retries: %v", err)
+	}
+	defer conn.Close()
 
-	// Start the server/conection and such
-
-	node := Node{
-		state:       released,
-		nodeID:      int32(*name),
-		lamport:     1,
-		replies:     make(chan int),
-		connections: make(map[int32]*Connection),
+	client := pb.NewTokenRingServiceClient(conn)
+	token := &pb.Token{
+		Holder:    holder,
+		Timestamp: int32(time.Now().Unix()),
 	}
 
-	go node.instansiateNode()
-
-	node.connectNodes()
-
+	_, err = client.PassToken(context.Background(), token)
+	if err != nil {
+		log.Printf("Failed to pass token to next node: %v", err)
+	} else {
+		log.Printf("%s passed the token to next node at %s:%s", n.name, n.nextNodeIP, n.nextNodePort)
+	}
 }
 
-func (node *Node) instansiateNode() {
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", *port))
+// StartGRPCServer starts the gRPC server for the node
+func (n *Node) StartGRPCServer() {
+	listener, err := net.Listen("tcp", ":"+n.port)
 	if err != nil {
-		log.Fatalf("failed to listen on port %s: %v", *port, err)
-		return
+		log.Fatalf("Failed to listen on port %s: %v", n.port, err)
 	}
 
 	grpcServer := grpc.NewServer()
-	proto.RegisterMutexServiceServer(grpcServer, node)
+	pb.RegisterTokenRingServiceServer(grpcServer, n)
+	log.Printf("%s is listening on port %s", n.name, n.port)
 
-	fmt.Printf("Node %d listening on port %s\n", *name, *port)
-
-	if err := grpcServer.Serve(lis); err != nil {
-		log.Fatalf("failed to serve %v", err)
+	if err := grpcServer.Serve(listener); err != nil {
+		log.Fatalf("Failed to serve gRPC server: %v", err)
 	}
 }
 
-func updateState() {
-
-}
-
-func (node *Node) connectNodes() {
-	peers := *peerAddresses
-	if peers == "" {
-		fmt.Println("No peers specified, running in standalone mode")
-		return
+func main() {
+	logFile, err := os.OpenFile("../consensus-log.txt", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatalf("Failed to open log file: %v", err)
 	}
+	defer logFile.Close()
+	log.SetOutput(logFile)
 
-	peerList := strings.Split(peers, ",")
-	for _, peerAddr := range peerList {
-		conn, err := grpc.Dial(peerAddr, grpc.WithInsecure())
-		if err != nil {
-			log.Printf("Failed to connect to peer %s: %v", peerAddr, err)
-			continue
+	if len(os.Args) != 5 {
+		log.Fatalf("Usage: %s <nodeName> <port> <nextNodeIP> <nextNodePort>", os.Args[0])
+	}
+	nodeName := os.Args[1]
+	port := os.Args[2]
+	nextNodeIP := os.Args[3]
+	nextNodePort := os.Args[4]
+
+	// Add node to the queue
+	AddNodeToQueue(nodeName)
+
+	// Determine if this node should start with the token
+	hasToken := ShouldNodeStartWithToken(nodeName)
+
+	// Create a new node
+	node := NewNode(nodeName, port, nextNodeIP, nextNodePort, hasToken)
+
+	// Start the gRPC server
+	go node.StartGRPCServer()
+
+	// Example token request (emulate critical section access)
+	for {
+		time.Sleep(10 * time.Second)
+		if node.hasToken {
+			log.Printf("%s entering critical section", node.name)
+			time.Sleep(3 * time.Second) // Simulate critical section operation
+			log.Printf("%s leaving critical section", node.name)
+			node.hasToken = false
+			node.PassTokenToNext(node.name) // Pass the token to the next node
+		} else {
+			log.Printf("%s does not have the token", node.name)
 		}
-
-		client := proto.NewMutexServiceClient(conn)
-		nodeID := int32(strings.Split(peerAddr, ":")[1][len(peerAddr)-1]) // This is a placeholder; adjust based on node ID scheme
-		node.connections[nodeID] = &Connection{node: client, nodeConnection: conn}
-
-		log.Printf("Connected to peer %s", peerAddr)
 	}
 }
 
-func (node *Node) requestAccess() {
-	node.incrementLamport()
-	node.state = requested
-
-	// Request access
-
-	// Vent på svar
-
-	// Hop ind
+func AddNodeToQueue(nodeName string) {
+	nodeQueue = append(nodeQueue, nodeName) // Add the node to the queue
 }
 
-func (node *Node) receiveReply() {
-
-}
-
-func (node *Node) enterCriticalSection() {
-	node.mutex.Lock()
-	node.state = held
-	fmt.Printf("Node %d is entering the critical section\n", node.nodeID) //til loggen
-	time.Sleep(2 * time.Second)
-	fmt.Printf("Node %d is leaving the critical section\n", node.nodeID) //til loggen
-	node.state = released
-	node.mutex.Unlock()
-}
-
-func (node *Node) sendReply() {
-
-}
-
-func (node *Node) incrementLamport() {
-	node.mutex.Lock()
-	node.lamport++
-	node.mutex.Unlock()
-}
-
-func checkLamport() {
-	//if(node.lamport < )
+// Check if the node should start with the token
+func ShouldNodeStartWithToken(nodeName string) bool {
+	return len(nodeQueue) == 1 && nodeQueue[0] == nodeName // Only the first node in the queue gets the token
 }

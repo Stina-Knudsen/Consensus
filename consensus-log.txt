@@ -1,0 +1,187 @@
+2024/11/06 15:26:00 Node1 is listening on port 5001
+2024/11/06 15:26:08 Node2 is listening on port 5002
+2024/11/06 15:26:10 Node1 entering critical section
+2024/11/06 15:26:13 Node1 leaving critical section
+2024/11/06 15:26:13 Node2 received the token from Node1
+2024/11/06 15:26:13 Node1 passed the token to next node at 127.0.0.1:5002
+2024/11/06 15:26:18 Node2 entering critical section
+2024/11/06 15:26:19 Node3 is listening on port 5003
+2024/11/06 15:26:21 Node2 leaving critical section
+2024/11/06 15:26:21 Node3 received the token from Node2
+2024/11/06 15:26:21 Node2 passed the token to next node at 127.0.0.1:5003
+2024/11/06 15:26:23 Node1 does not have the token
+2024/11/06 15:26:29 Node3 entering critical section
+2024/11/06 15:26:31 Node2 does not have the token
+2024/11/06 15:26:32 Node3 leaving critical section
+2024/11/06 15:26:32 Node1 received the token from Node3
+2024/11/06 15:26:32 Node3 passed the token to next node at 127.0.0.1:5001
+2024/11/06 15:26:33 Node1 entering critical section
+2024/11/06 15:26:36 Node1 leaving critical section
+2024/11/06 15:26:36 Node2 received the token from Node1
+2024/11/06 15:26:36 Node1 passed the token to next node at 127.0.0.1:5002
+2024/11/06 15:26:41 Node2 entering critical section
+2024/11/06 15:26:42 Node3 does not have the token
+2024/11/06 15:26:44 Node2 leaving critical section
+2024/11/06 15:26:44 Node3 received the token from Node2
+2024/11/06 15:26:44 Node2 passed the token to next node at 127.0.0.1:5003
+2024/11/06 15:26:46 Node1 does not have the token
+2024/11/06 15:26:52 Node3 entering critical section
+2024/11/06 15:26:54 Node2 does not have the token
+2024/11/06 15:26:55 Node3 leaving critical section
+2024/11/06 15:26:55 Node1 received the token from Node3
+2024/11/06 15:26:55 Node3 passed the token to next node at 127.0.0.1:5001
+2024/11/06 15:26:56 Node1 entering critical section
+2024/11/06 15:26:59 Node1 leaving critical section
+2024/11/06 15:26:59 Node2 received the token from Node1
+2024/11/06 15:26:59 Node1 passed the token to next node at 127.0.0.1:5002
+2024/11/06 15:27:04 Node2 entering critical section
+2024/11/06 15:27:05 Node3 does not have the token
+2024/11/06 15:27:07 Node2 leaving critical section
+2024/11/06 15:27:07 Node3 received the token from Node2
+2024/11/06 15:27:07 Node2 passed the token to next node at 127.0.0.1:5003
+2024/11/06 15:27:09 Node1 does not have the token
+2024/11/06 15:27:15 Node3 entering critical section
+2024/11/06 15:27:17 Node2 does not have the token
+2024/11/06 15:27:18 Node3 leaving critical section
+2024/11/06 15:27:18 Node1 received the token from Node3
+2024/11/06 15:27:18 Node3 passed the token to next node at 127.0.0.1:5001
+2024/11/06 15:27:19 Node1 entering critical section
+2024/11/06 15:27:22 Node1 leaving critical section
+2024/11/06 15:27:22 Node2 received the token from Node1
+2024/11/06 15:27:22 Node1 passed the token to next node at 127.0.0.1:5002
+2024/11/06 15:27:27 Node2 entering critical section
+2024/11/06 15:27:28 Node3 does not have the token
+2024/11/06 15:27:30 Node2 leaving critical section
+2024/11/06 15:27:30 Node3 received the token from Node2
+2024/11/06 15:27:30 Node2 passed the token to next node at 127.0.0.1:5003
+2024/11/06 15:27:32 Node1 does not have the token
+2024/11/06 15:27:38 Node3 entering critical section
+2024/11/06 15:27:40 Node2 does not have the token
+2024/11/06 15:27:41 Node3 leaving critical section
+2024/11/06 15:27:41 Node1 received the token from Node3
+2024/11/06 15:27:41 Node3 passed the token to next node at 127.0.0.1:5001
+2024/11/06 15:27:42 Node1 entering critical section
+2024/11/06 15:27:45 Node1 leaving critical section
+2024/11/06 15:27:45 Node2 received the token from Node1
+2024/11/06 15:27:45 Node1 passed the token to next node at 127.0.0.1:5002
+2024/11/06 15:27:50 Node2 entering critical section
+2024/11/06 15:27:51 Node3 does not have the token
+2024/11/06 15:27:53 Node2 leaving critical section
+2024/11/06 15:27:53 Node3 received the token from Node2
+2024/11/06 15:27:53 Node2 passed the token to next node at 127.0.0.1:5003
+2024/11/06 15:27:55 Node1 does not have the token
+2024/11/06 15:28:01 Node3 entering critical section
+2024/11/06 15:28:03 Node2 does not have the token
+2024/11/06 15:28:04 Node3 leaving critical section
+2024/11/06 15:28:04 Node1 received the token from Node3
+2024/11/06 15:28:04 Node3 passed the token to next node at 127.0.0.1:5001
+2024/11/06 15:28:05 Node1 entering critical section
+2024/11/06 15:28:08 Node1 leaving critical section
+2024/11/06 15:28:08 Node2 received the token from Node1
+2024/11/06 15:28:08 Node1 passed the token to next node at 127.0.0.1:5002
+2024/11/06 15:28:13 Node2 entering critical section
+2024/11/06 15:28:14 Node3 does not have the token
+2024/11/06 15:28:16 Node2 leaving critical section
+2024/11/06 15:28:16 Node3 received the token from Node2
+2024/11/06 15:28:16 Node2 passed the token to next node at 127.0.0.1:5003
+2024/11/06 15:28:18 Node1 does not have the token
+2024/11/06 15:28:24 Node3 entering critical section
+2024/11/06 15:28:26 Node2 does not have the token
+2024/11/06 15:28:27 Node3 leaving critical section
+2024/11/06 15:28:27 Node1 received the token from Node3
+2024/11/06 15:28:27 Node3 passed the token to next node at 127.0.0.1:5001
+2024/11/06 15:28:28 Node1 entering critical section
+2024/11/06 15:28:31 Node1 leaving critical section
+2024/11/06 15:28:31 Node2 received the token from Node1
+2024/11/06 15:28:31 Node1 passed the token to next node at 127.0.0.1:5002
+2024/11/06 15:28:36 Node2 entering critical section
+2024/11/06 15:28:37 Node3 does not have the token
+2024/11/06 15:28:39 Node2 leaving critical section
+2024/11/06 15:28:39 Node3 received the token from Node2
+2024/11/06 15:28:39 Node2 passed the token to next node at 127.0.0.1:5003
+2024/11/06 15:28:41 Node1 does not have the token
+2024/11/06 15:28:47 Node3 entering critical section
+2024/11/06 15:28:49 Node2 does not have the token
+2024/11/06 15:28:50 Node3 leaving critical section
+2024/11/06 15:28:50 Node1 received the token from Node3
+2024/11/06 15:28:50 Node3 passed the token to next node at 127.0.0.1:5001
+2024/11/06 15:28:51 Node1 entering critical section
+2024/11/06 15:28:54 Node1 leaving critical section
+2024/11/06 15:28:54 Node2 received the token from Node1
+2024/11/06 15:28:54 Node1 passed the token to next node at 127.0.0.1:5002
+2024/11/06 15:28:59 Node2 entering critical section
+2024/11/06 15:29:00 Node3 does not have the token
+2024/11/06 15:29:02 Node2 leaving critical section
+2024/11/06 15:29:02 Node3 received the token from Node2
+2024/11/06 15:29:02 Node2 passed the token to next node at 127.0.0.1:5003
+2024/11/06 15:29:04 Node1 does not have the token
+2024/11/06 15:29:10 Node3 entering critical section
+2024/11/06 15:29:12 Node2 does not have the token
+2024/11/06 15:29:13 Node3 leaving critical section
+2024/11/06 15:29:13 Node1 received the token from Node3
+2024/11/06 15:29:13 Node3 passed the token to next node at 127.0.0.1:5001
+2024/11/06 15:29:14 Node1 entering critical section
+2024/11/06 15:29:17 Node1 leaving critical section
+2024/11/06 15:29:17 Node2 received the token from Node1
+2024/11/06 15:29:17 Node1 passed the token to next node at 127.0.0.1:5002
+2024/11/06 15:29:22 Node2 entering critical section
+2024/11/06 15:29:23 Node3 does not have the token
+2024/11/06 15:29:25 Node2 leaving critical section
+2024/11/06 15:29:25 Node3 received the token from Node2
+2024/11/06 15:29:25 Node2 passed the token to next node at 127.0.0.1:5003
+2024/11/06 15:29:27 Node1 does not have the token
+2024/11/06 15:29:33 Node3 entering critical section
+2024/11/06 15:29:35 Node2 does not have the token
+2024/11/06 15:29:36 Node3 leaving critical section
+2024/11/06 15:29:36 Node1 received the token from Node3
+2024/11/06 15:29:36 Node3 passed the token to next node at 127.0.0.1:5001
+2024/11/06 15:29:37 Node1 entering critical section
+2024/11/06 15:29:40 Node1 leaving critical section
+2024/11/06 15:29:40 Node2 received the token from Node1
+2024/11/06 15:29:40 Node1 passed the token to next node at 127.0.0.1:5002
+2024/11/06 15:29:45 Node2 entering critical section
+2024/11/06 15:29:46 Node3 does not have the token
+2024/11/06 15:29:48 Node2 leaving critical section
+2024/11/06 15:29:48 Node3 received the token from Node2
+2024/11/06 15:29:48 Node2 passed the token to next node at 127.0.0.1:5003
+2024/11/06 15:29:50 Node1 does not have the token
+2024/11/06 15:29:56 Node3 entering critical section
+2024/11/06 15:29:58 Node2 does not have the token
+2024/11/06 15:29:59 Node3 leaving critical section
+2024/11/06 15:29:59 Node1 received the token from Node3
+2024/11/06 15:29:59 Node3 passed the token to next node at 127.0.0.1:5001
+2024/11/06 15:30:00 Node1 entering critical section
+2024/11/06 15:30:03 Node1 leaving critical section
+2024/11/06 15:30:03 Node2 received the token from Node1
+2024/11/06 15:30:03 Node1 passed the token to next node at 127.0.0.1:5002
+2024/11/06 15:30:08 Node2 entering critical section
+2024/11/06 15:30:09 Node3 does not have the token
+2024/11/06 15:30:11 Node2 leaving critical section
+2024/11/06 15:30:11 Node3 received the token from Node2
+2024/11/06 15:30:11 Node2 passed the token to next node at 127.0.0.1:5003
+2024/11/06 15:30:13 Node1 does not have the token
+2024/11/06 15:30:19 Node3 entering critical section
+2024/11/06 15:30:21 Node2 does not have the token
+2024/11/06 15:30:22 Node3 leaving critical section
+2024/11/06 15:30:22 Node1 received the token from Node3
+2024/11/06 15:30:22 Node3 passed the token to next node at 127.0.0.1:5001
+2024/11/06 15:30:23 Node1 entering critical section
+2024/11/06 15:30:26 Node1 leaving critical section
+2024/11/06 15:30:26 Node2 received the token from Node1
+2024/11/06 15:30:26 Node1 passed the token to next node at 127.0.0.1:5002
+2024/11/06 15:30:31 Node2 entering critical section
+2024/11/06 15:30:32 Node3 does not have the token
+2024/11/06 15:30:34 Node2 leaving critical section
+2024/11/06 15:30:34 Node3 received the token from Node2
+2024/11/06 15:30:34 Node2 passed the token to next node at 127.0.0.1:5003
+2024/11/06 15:30:36 Node1 does not have the token
+2024/11/06 15:30:42 Node3 entering critical section
+2024/11/06 15:30:44 Node2 does not have the token
+2024/11/06 15:30:45 Node3 leaving critical section
+2024/11/06 15:30:45 Node1 received the token from Node3
+2024/11/06 15:30:45 Node3 passed the token to next node at 127.0.0.1:5001
+2024/11/06 15:30:46 Node1 entering critical section
+2024/11/06 15:30:49 Node1 leaving critical section
+2024/11/06 15:30:49 Node2 received the token from Node1
+2024/11/06 15:30:49 Node1 passed the token to next node at 127.0.0.1:5002
+2024/11/06 15:30:54 Node2 entering critical section

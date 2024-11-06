@@ -1,24 +1,31 @@
 syntax = "proto3";
 
-option go_package = "../grpc";
-
 package proto;
+option go_package = "Consensus/GRPC;proto";
 
-// https://www.geeksforgeeks.org/ricart-agrawala-algorithm-in-mutual-exclusion-in-distributed-system/
+// Define the gRPC service
+service TokenRingService {
+  // RPC to request entering the Critical Section
+  rpc RequestToken (TokenRequest) returns (TokenResponse);
 
-service MutexService {
-    rpc RequestMessage(Request) returns (Reply);
+  // RPC to pass the token to the next node
+  rpc PassToken (Token) returns (TokenResponse);
 }
 
-message Request {
-    int32 nodeId = 1;
-    int32 lamport = 2;
-    string port = 3;
+// Define a message for requesting access to the Critical Section
+message TokenRequest {
+  string nodeName = 1;   // The name or ID of the requesting node
+  int32 timestamp = 2;   // Timestamp or logical clock value
 }
 
-
-message Reply {
-    string message = 1;
-    int32 lamport = 2;
+// Define a message for passing the token
+message Token {
+  string holder = 1;     // The current holder of the token
+  int32 timestamp = 2;   // Timestamp or logical clock value
 }
 
+// Define a response message
+message TokenResponse {
+  string status = 1;     // Status message (e.g., "granted" or "passed")
+  string message = 2;    // Additional message for logging or details
+}
