@@ -4,7 +4,7 @@
 // - protoc             v5.28.2
 // source: proto.proto
 
-package grpc
+package proto
 
 import (
 	context "context"
@@ -19,139 +19,147 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	MutexService_RequestMessage_FullMethodName = "/proto.MutexService/RequestMessage"
-	MutexService_ReplyMessage_FullMethodName   = "/proto.MutexService/ReplyMessage"
+	TokenRingService_RequestToken_FullMethodName = "/proto.TokenRingService/RequestToken"
+	TokenRingService_PassToken_FullMethodName    = "/proto.TokenRingService/PassToken"
 )
 
-// MutexServiceClient is the client API for MutexService service.
+// TokenRingServiceClient is the client API for TokenRingService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type MutexServiceClient interface {
-	RequestMessage(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Reply, error)
-	ReplyMessage(ctx context.Context, in *Reply, opts ...grpc.CallOption) (*Empty, error)
+//
+// Define the gRPC service
+type TokenRingServiceClient interface {
+	// RPC to request entering the Critical Section
+	RequestToken(ctx context.Context, in *TokenRequest, opts ...grpc.CallOption) (*TokenResponse, error)
+	// RPC to pass the token to the next node
+	PassToken(ctx context.Context, in *Token, opts ...grpc.CallOption) (*TokenResponse, error)
 }
 
-type mutexServiceClient struct {
+type tokenRingServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewMutexServiceClient(cc grpc.ClientConnInterface) MutexServiceClient {
-	return &mutexServiceClient{cc}
+func NewTokenRingServiceClient(cc grpc.ClientConnInterface) TokenRingServiceClient {
+	return &tokenRingServiceClient{cc}
 }
 
-func (c *mutexServiceClient) RequestMessage(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Reply, error) {
+func (c *tokenRingServiceClient) RequestToken(ctx context.Context, in *TokenRequest, opts ...grpc.CallOption) (*TokenResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Reply)
-	err := c.cc.Invoke(ctx, MutexService_RequestMessage_FullMethodName, in, out, cOpts...)
+	out := new(TokenResponse)
+	err := c.cc.Invoke(ctx, TokenRingService_RequestToken_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *mutexServiceClient) ReplyMessage(ctx context.Context, in *Reply, opts ...grpc.CallOption) (*Empty, error) {
+func (c *tokenRingServiceClient) PassToken(ctx context.Context, in *Token, opts ...grpc.CallOption) (*TokenResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Empty)
-	err := c.cc.Invoke(ctx, MutexService_ReplyMessage_FullMethodName, in, out, cOpts...)
+	out := new(TokenResponse)
+	err := c.cc.Invoke(ctx, TokenRingService_PassToken_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// MutexServiceServer is the server API for MutexService service.
-// All implementations must embed UnimplementedMutexServiceServer
+// TokenRingServiceServer is the server API for TokenRingService service.
+// All implementations must embed UnimplementedTokenRingServiceServer
 // for forward compatibility.
-type MutexServiceServer interface {
-	RequestMessage(context.Context, *Request) (*Reply, error)
-	ReplyMessage(context.Context, *Reply) (*Empty, error)
-	mustEmbedUnimplementedMutexServiceServer()
+//
+// Define the gRPC service
+type TokenRingServiceServer interface {
+	// RPC to request entering the Critical Section
+	RequestToken(context.Context, *TokenRequest) (*TokenResponse, error)
+	// RPC to pass the token to the next node
+	PassToken(context.Context, *Token) (*TokenResponse, error)
+	mustEmbedUnimplementedTokenRingServiceServer()
 }
 
-// UnimplementedMutexServiceServer must be embedded to have
+// UnimplementedTokenRingServiceServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedMutexServiceServer struct{}
+type UnimplementedTokenRingServiceServer struct{}
 
-func (UnimplementedMutexServiceServer) RequestMessage(context.Context, *Request) (*Reply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RequestMessage not implemented")
+func (UnimplementedTokenRingServiceServer) RequestToken(context.Context, *TokenRequest) (*TokenResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RequestToken not implemented")
 }
-func (UnimplementedMutexServiceServer) ReplyMessage(context.Context, *Reply) (*Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ReplyMessage not implemented")
+func (UnimplementedTokenRingServiceServer) PassToken(context.Context, *Token) (*TokenResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PassToken not implemented")
 }
-func (UnimplementedMutexServiceServer) mustEmbedUnimplementedMutexServiceServer() {}
-func (UnimplementedMutexServiceServer) testEmbeddedByValue()                      {}
+func (UnimplementedTokenRingServiceServer) mustEmbedUnimplementedTokenRingServiceServer() {}
+func (UnimplementedTokenRingServiceServer) testEmbeddedByValue()                          {}
 
-// UnsafeMutexServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to MutexServiceServer will
+// UnsafeTokenRingServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to TokenRingServiceServer will
 // result in compilation errors.
-type UnsafeMutexServiceServer interface {
-	mustEmbedUnimplementedMutexServiceServer()
+type UnsafeTokenRingServiceServer interface {
+	mustEmbedUnimplementedTokenRingServiceServer()
 }
 
-func RegisterMutexServiceServer(s grpc.ServiceRegistrar, srv MutexServiceServer) {
-	// If the following call pancis, it indicates UnimplementedMutexServiceServer was
+func RegisterTokenRingServiceServer(s grpc.ServiceRegistrar, srv TokenRingServiceServer) {
+	// If the following call pancis, it indicates UnimplementedTokenRingServiceServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&MutexService_ServiceDesc, srv)
+	s.RegisterService(&TokenRingService_ServiceDesc, srv)
 }
 
-func _MutexService_RequestMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Request)
+func _TokenRingService_RequestToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TokenRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MutexServiceServer).RequestMessage(ctx, in)
+		return srv.(TokenRingServiceServer).RequestToken(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: MutexService_RequestMessage_FullMethodName,
+		FullMethod: TokenRingService_RequestToken_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MutexServiceServer).RequestMessage(ctx, req.(*Request))
+		return srv.(TokenRingServiceServer).RequestToken(ctx, req.(*TokenRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _MutexService_ReplyMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Reply)
+func _TokenRingService_PassToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Token)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MutexServiceServer).ReplyMessage(ctx, in)
+		return srv.(TokenRingServiceServer).PassToken(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: MutexService_ReplyMessage_FullMethodName,
+		FullMethod: TokenRingService_PassToken_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MutexServiceServer).ReplyMessage(ctx, req.(*Reply))
+		return srv.(TokenRingServiceServer).PassToken(ctx, req.(*Token))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// MutexService_ServiceDesc is the grpc.ServiceDesc for MutexService service.
+// TokenRingService_ServiceDesc is the grpc.ServiceDesc for TokenRingService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var MutexService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "proto.MutexService",
-	HandlerType: (*MutexServiceServer)(nil),
+var TokenRingService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "proto.TokenRingService",
+	HandlerType: (*TokenRingServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "RequestMessage",
-			Handler:    _MutexService_RequestMessage_Handler,
+			MethodName: "RequestToken",
+			Handler:    _TokenRingService_RequestToken_Handler,
 		},
 		{
-			MethodName: "ReplyMessage",
-			Handler:    _MutexService_ReplyMessage_Handler,
+			MethodName: "PassToken",
+			Handler:    _TokenRingService_PassToken_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

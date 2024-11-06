@@ -1,0 +1,54 @@
+2024/11/06 14:19:45 Node Node1 is listening on port 5001
+2024/11/06 14:19:55 Node Node1 does not have the token
+2024/11/06 14:20:05 Node Node1 does not have the token
+2024/11/06 14:20:15 Node Node1 does not have the token
+2024/11/06 14:20:25 Node Node1 does not have the token
+2024/11/06 14:20:35 Node Node1 does not have the token
+2024/11/06 14:20:36 Node Node2 is listening on port 5002
+2024/11/06 14:20:45 Node Node1 does not have the token
+2024/11/06 14:20:46 Node Node2 does not have the token
+2024/11/06 14:20:55 Node Node1 does not have the token
+2024/11/06 14:20:56 Node Node2 does not have the token
+2024/11/06 14:21:05 Node Node1 does not have the token
+2024/11/06 14:21:06 Node Node2 does not have the token
+2024/11/06 14:21:15 Node Node1 does not have the token
+2024/11/06 14:21:16 Node Node2 does not have the token
+2024/11/06 14:21:25 Node Node1 does not have the token
+2024/11/06 14:21:26 Node Node2 does not have the token
+2024/11/06 14:21:35 Node Node1 does not have the token
+2024/11/06 14:21:36 Node Node2 does not have the token
+2024/11/06 14:21:45 Node Node1 does not have the token
+2024/11/06 14:21:46 Node Node2 does not have the token
+2024/11/06 14:21:55 Node Node1 does not have the token
+2024/11/06 14:21:56 Node Node2 does not have the token
+2024/11/06 14:22:05 Node Node1 does not have the token
+2024/11/06 14:22:15 Node Node1 does not have the token
+2024/11/06 14:22:25 Node Node1 does not have the token
+2024/11/06 14:22:35 Node Node1 does not have the token
+2024/11/06 14:22:45 Node Node1 does not have the token
+2024/11/06 14:22:55 Node Node1 does not have the token
+2024/11/06 14:23:05 Node Node1 does not have the token
+2024/11/06 14:23:27 Node Node1 is listening on port 5001
+2024/11/06 14:23:37 Node Node1 entering critical section
+2024/11/06 14:23:40 Node Node1 leaving critical section
+2024/11/06 14:23:40 Failed to pass token to next node: rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing: dial tcp 127.0.0.1:5002: connect: connection refused"
+2024/11/06 14:23:50 Node Node1 does not have the token
+2024/11/06 14:24:00 Node Node1 does not have the token
+2024/11/06 14:24:10 Node Node1 does not have the token
+2024/11/06 14:24:20 Node Node1 does not have the token
+2024/11/06 14:24:26 Node Node2 is listening on port 5002
+2024/11/06 14:24:30 Node Node1 does not have the token
+2024/11/06 14:24:36 Node Node2 entering critical section
+2024/11/06 14:24:39 Node Node2 leaving critical section
+2024/11/06 14:24:39 Failed to pass token to next node: rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing: dial tcp 127.0.0.1:5003: connect: connection refused"
+2024/11/06 14:24:40 Node Node1 does not have the token
+2024/11/06 14:24:49 Node Node2 does not have the token
+2024/11/06 14:24:50 Node Node1 does not have the token
+2024/11/06 14:24:59 Node Node2 does not have the token
+2024/11/06 14:25:00 Node Node1 does not have the token
+2024/11/06 14:25:09 Node Node2 does not have the token
+2024/11/06 14:25:10 Node Node1 does not have the token
+2024/11/06 14:25:19 Node Node2 does not have the token
+2024/11/06 14:25:20 Node Node1 does not have the token
+2024/11/06 14:25:29 Node Node2 does not have the token
+2024/11/06 14:25:30 Node Node1 does not have the token
