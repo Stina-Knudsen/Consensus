@@ -9,7 +9,6 @@ import (
 	"log"
 	"net"
 	"os"
-	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -35,7 +34,7 @@ type Node struct {
 	lamport        int32
 	queue          []int32
 	connections    map[int32]*Connection
-	pendingReplies int32
+	pendingReplies int
 }
 
 type Connection struct {
@@ -108,33 +107,15 @@ func (node *Node) connectNodes() {
 	}
 
 	peerList := strings.Split(peers, ",")
-	for _, peerAddr := range peerList {
+	for index, peerAddr := range peerList {
 
-		parts := strings.Split(peerAddr, ":")
-		if len(parts) != 2 {
-			log.Printf("Invalid peer format for %s, skipping", peerAddr)
-			continue
-		}
+		nodeID := int32(index + 1)
 
-		// extract nodeID and port
-		nodeIDStr := parts[0]
-		port := parts[1]
+		log.Printf("Connecting to peer with nodeID: %d, address: %s\n", nodeID, peerAddr)
 
-		log.Printf("------- nodeID: %s\n", nodeIDStr)
-		log.Printf("------- port: %s\n", port)
-
-		// nodeID from string to integer, does not need
-		nodeID, err := strconv.Atoi(nodeIDStr)
+		conn, err := grpc.Dial(peerAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 		if err != nil {
-			log.Printf("Invalid node ID for peer %s: %v", peerAddr, err)
-			continue
-		}
-
-		address := fmt.Sprintf("%s:%s", parts[0], port)
-
-		conn, err := grpc.Dial(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
-		if err != nil {
-			log.Printf("Failed to connect to peer node %s on port %s: %v", nodeIDStr, port, err)
+			log.Printf("Failed to connect to peer node %s on port %s: %v", peerAddr, *port, err)
 			continue
 		}
 
@@ -147,7 +128,6 @@ func (node *Node) connectNodes() {
 		}
 
 		//node.connections[nodeID] = &Connection{node: client, nodeConnection: conn}
-
 		log.Printf("Connected node %d to peer %s", nodeID, peerAddr)
 	}
 }
@@ -171,9 +151,10 @@ func (node *Node) handleInput() {
 
 func (node *Node) requestAccess() {
 	node.incrementLamport()
-	node.pendingReplies = int32(len(node.connections))
-
 	node.state = requested
+	node.pendingReplies = int(len(node.connections))
+
+	log.Printf("Node %d is requesting access at lamport time %d", node.nodeID, node.lamport)
 
 	for id, conn := range node.connections {
 		_, err := conn.node.RequestMessage(context.Background(), &proto.Request{
@@ -195,14 +176,14 @@ func (node *Node) requestAccess() {
 
 func (node *Node) RequestMessage(ctx context.Context, req *proto.Request) (*proto.Reply, error) {
 
-	log.Printf("Node %d is requesting access at lamport time %d", node.nodeID, node.lamport)
-
 	node.incrementLamport()
 	node.lamport = max(node.lamport, req.Lamport) + 1
 
-	if node.state == held || (node.state == requested && (node.lamport < req.Lamport || (node.lamport == req.Lamport && node.nodeID < req.NodeId))) {
+	if node.state == held || (node.state == requested &&
+		(node.lamport < req.Lamport || (node.lamport == req.Lamport && node.nodeID < req.NodeId))) {
 		node.queue = append(node.queue, req.NodeId)
 		log.Printf("Request from node %d deferred at lamport: %d", node.nodeID, node.lamport)
+
 		return &proto.Reply{Message: "Request deferred", Lamport: node.lamport}, nil
 	}
 
@@ -212,9 +193,9 @@ func (node *Node) RequestMessage(ctx context.Context, req *proto.Request) (*prot
 
 func (node *Node) enterCriticalSection() {
 	node.mutex.Lock()
-	defer node.mutex.Unlock()
-
 	node.state = held
+	node.mutex.Unlock()
+
 	log.Printf("Node %d is entering the critical section\n", node.nodeID)
 
 	time.Sleep(5 * time.Second)
