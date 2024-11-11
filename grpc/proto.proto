@@ -3,29 +3,23 @@ syntax = "proto3";
 package proto;
 option go_package = "Consensus/GRPC;proto";
 
-// Define the gRPC service
-service TokenRingService {
-  // RPC to request entering the Critical Section
-  rpc RequestToken (TokenRequest) returns (TokenResponse);
 
-  // RPC to pass the token to the next node
+service TokenRingService {
+  rpc RequestToken (TokenRequest) returns (TokenResponse);
   rpc PassToken (Token) returns (TokenResponse);
 }
 
-// Define a message for requesting access to the Critical Section
 message TokenRequest {
-  string nodeName = 1;   // The name or ID of the requesting node
-  int32 timestamp = 2;   // Timestamp or logical clock value
+  string nodeName = 1;   
+  int32 timestamp = 2;   
 }
 
-// Define a message for passing the token
 message Token {
-  string holder = 1;     // The current holder of the token
-  int32 timestamp = 2;   // Timestamp or logical clock value
+  string holder = 1;     
+  int32 timestamp = 2;  
 }
 
-// Define a response message
 message TokenResponse {
-  string status = 1;     // Status message (e.g., "granted" or "passed")
-  string message = 2;    // Additional message for logging or details
+  string status = 1;    
+  string message = 2;   
 }

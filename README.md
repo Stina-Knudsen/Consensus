@@ -8,7 +8,7 @@ The instructions assume you start at the root.
 1. Step is to set up the nodes
 - open a terminal
 - cd node
-- go run node.go <name> <port> <nextNodeIP> <nextNodePort>
+- `go run node.go <name> <port> <nextNodeIP> <nextNodePort>`
 - repeat the steps as many times as you want nodes
 
 Eg. if you want to run the program with three nodes, you need to open three terminals
